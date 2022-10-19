@@ -16,11 +16,17 @@ module.exports = {
       width: {
         "custom-2": "calc((100% - 16px) / 2)",
         "custom-3": "calc((100% - 32px) / 3)",
-        "custom-4": "calc((100% - 48px) / 4)"
+        "custom-4": "calc((100% - 48px) / 4)",
+        "custom-graph-sm":"20px",
+        "custom-graph-md":"34px"
+        
       },
       margin: {
         "4.5": "1.125rem"
       },
+      borderWidth: {
+        "3": "3px"
+      }
       
     },
   },

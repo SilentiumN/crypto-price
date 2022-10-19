@@ -12,10 +12,12 @@ export default {
     },
     data() {
         return {
-          ws: null
+          
         };
     },
-    mounted() {},
+    mounted() {
+      
+    },
     methods: {
         
     },

@@ -1,7 +1,7 @@
 <template>
     <div class="font-inter p-4 bg-white rounded-none sm:rounded-lg w-full">
-        <CryptoAddNewValueTicker />
-        <CryptoButtonPurple class="mt-3">Добавить </CryptoButtonPurple>
+        <CryptoAddNewValueTicker :modelValue="newSubValue" @update:modelValue="newValue => newSubValue = newValue"/>
+        <CryptoButtonPurple class="mt-3" @click="addNewSubValue">Добавить </CryptoButtonPurple>
     </div>
 </template>
 
@@ -15,8 +15,15 @@ export default {
         CryptoAddNewValueTicker,
     },
     data() {
-        return {};
+        return {
+            newSubValue: ''
+        };
     },
-    methods: {},
+    methods: {
+        addNewSubValue() {
+            this.$store.dispatch("cryptoCompareModule/addNewSub", [this.newSubValue.toUpperCase()])
+            this.newSubValue = ""
+        }
+    },
 };
 </script>

@@ -24,6 +24,7 @@
             id="default-search"
             class="p-3 pl-11 w-full text-base text-gray-500 bg-white rounded-lg border border-solid border-gray-300 shadow-sm outline-0 font-inter"
             placeholder="Найти тикер"
+            v-model="searchValue"
         />
         
     </div>
@@ -33,9 +34,20 @@
 export default {
     components: {},
     data() {
-        return {};
+        return {
+        };
     },
     methods: {},
+    computed: {
+        searchValue: {
+            get() {
+                return this.$store.state.cryptoCompareModule.filterValue
+            },
+            set(newValue) {
+                this.$store.dispatch("cryptoCompareModule/updateFilteredSubName", newValue.toUpperCase())
+            }
+        }
+    }
 };
 </script>
 
