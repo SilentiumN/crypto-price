@@ -71,7 +71,7 @@
         </div>
         <div
             v-else
-            class="font-inter flex items-center justify-center p-4 text-lg text-gray-700 transition-all"
+            class="font-inter flex items-center justify-center p-4 text-lg text-gray-700 transition-all text-center"
         >
             Ошибка при соединении с сервером. Одновременно может быть не более
             одного клиента.

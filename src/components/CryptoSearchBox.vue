@@ -22,7 +22,7 @@
         <input
             type="search"
             id="default-search"
-            class="p-3 pl-11 w-full text-base text-gray-500 bg-white rounded-lg border border-solid border-gray-300 shadow-sm outline-0 font-inter"
+            class="p-3 pl-11 w-full text-base text-gray-500 bg-white rounded-lg border border-solid border-gray-300 shadow-sm outline-none font-inter"
             placeholder="Найти тикер"
             v-model="searchValue"
         />
