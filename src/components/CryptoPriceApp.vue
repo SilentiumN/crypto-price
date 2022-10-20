@@ -21,8 +21,8 @@
             </div>
             <CryptoGraph v-if="windowWidth >= 640 && activeSubNameGraph" />
             <div
-                class="font-inter flex items-center justify-between bg-white sm:bg-transparent py-3 px-4 sm:px-0 border-t border-solid border-gray-200 fixed sm:relative bottom-0 left-0 right-0"
-                v-if="cryptoSubNameLength != 0"
+                class="font-inter flex items-center justify-between bg-white sm:bg-transparent py-3 px-4 sm:px-0 border-t border-solid border-gray-200 fixed sm:relative bottom-0 left-0 right-0 transition-all"
+                v-if="cryptoSubNameLength > 6"
             >
                 <span
                     class="text-sm leading-5 font-normal text-gray-700 hidden sm:block"
