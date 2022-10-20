@@ -3,7 +3,10 @@
         <div class="sm:px-6 sm:pt-6">
             <CryptoAddNewValueBox />
         </div>
-        <div class="px-4 pt-4 sm:px-6 pb-16 sm:pb-0">
+        <div
+            class="px-4 pt-4 sm:px-6 pb-16 sm:pb-0"
+            v-if="connecting === 'success'"
+        >
             <CryptoSearchBox />
             <div
                 v-if="cryptoSubNameLength != 0"
@@ -27,14 +30,51 @@
                     {{ cryptoSubNameLength }}</span
                 >
                 <div class="w-full flex justify-between sm:w-fit">
-                    <CryptoButtonGray class="sm:mr-3" @click="decreasePage" :disabled="page === 1"
+                    <CryptoButtonGray
+                        class="sm:mr-3"
+                        @click="decreasePage"
+                        :disabled="page === 1"
                         >Назад</CryptoButtonGray
                     >
-                    <CryptoButtonGray @click="incrementPage" :disabled="page === maxPage"
+                    <CryptoButtonGray
+                        @click="incrementPage"
+                        :disabled="page === maxPage"
                         >Далее</CryptoButtonGray
                     >
                 </div>
             </div>
+        </div>
+        <div
+            v-else-if="connecting === 'loading'"
+            class="font-inter flex items-center justify-center p-4 text-lg text-gray-700 transition-all"
+        >
+        <svg
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                width="40"
+                height="40"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="xMidYMid"
+                class="animate-spin"
+            >
+                <circle
+                    cx="50"
+                    cy="50"
+                    fill="none"
+                    stroke="rgb(55, 65, 81)"
+                    stroke-width="10"
+                    r="35"
+                    stroke-dasharray="164.93361431346415 56.97787143782138"
+                ></circle>
+            </svg>
+            Идет загрузка
+        </div>
+        <div
+            v-else
+            class="font-inter flex items-center justify-center p-4 text-lg text-gray-700 transition-all"
+        >
+            Ошибка при соединении с сервером. Одновременно может быть не более
+            одного клиента.
         </div>
     </div>
 </template>
@@ -57,23 +97,17 @@ export default {
             import("@/components/CryptoGraph.vue")
         ),
     },
-    data() {
-        return {};
-    },
     mounted() {
         this.$store.dispatch("cryptoCompareModule/openWebSocket");
-        this.updateWindowWidth()
-        window.addEventListener("resize", this.updateWindowWidth)
+        this.updateWindowWidth();
+        window.addEventListener("resize", this.updateWindowWidth);
     },
     unmounted() {
-        window.removeEventListener("resize", this.updateWindowWidth)
+        window.removeEventListener("resize", this.updateWindowWidth);
     },
     methods: {
         incrementPage() {
-            this.$store.dispatch(
-                "cryptoCompareModule/updatePage",
-                "increment"
-            );
+            this.$store.dispatch("cryptoCompareModule/updatePage", "increment");
         },
         decreasePage() {
             this.$store.dispatch("cryptoCompareModule/updatePage", "decrease");
@@ -93,9 +127,7 @@ export default {
             return this.$store.state.cryptoCompareModule.page;
         },
         maxPage() {
-            return this.$store.getters[
-                "cryptoCompareModule/maxPage"
-            ];
+            return this.$store.getters["cryptoCompareModule/maxPage"];
         },
         cryptoSubNameLength() {
             return this.$store.getters[
@@ -118,8 +150,9 @@ export default {
         windowWidth() {
             return this.$store.state.cryptoCompareModule.windowWidth;
         },
+        connecting() {
+            return this.$store.state.cryptoCompareModule.connecting;
+        },
     },
 };
 </script>
-
-<style></style>

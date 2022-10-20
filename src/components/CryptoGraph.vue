@@ -6,7 +6,7 @@
             <div
                 v-for="(line, index) in graph"
                 :key="index"
-                class="w-custom-graph-sm sm:w-custom-graph-md bg-yellow-300 flex-none"
+                class="w-custom-graph-sm sm:w-custom-graph-md bg-yellow-300 flex-none transition-all"
                 :style="{ height: 'calc(100% + ' + line + '%)' }"
             />
         </div>
@@ -15,11 +15,6 @@
 
 <script>
 export default {
-    components: {},
-    data() {
-        return {};
-    },
-    methods: {},
     computed: {
         graph() {
             return this.$store.getters[

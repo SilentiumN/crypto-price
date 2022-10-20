@@ -10,7 +10,6 @@ class CryptoCompareService {
     }
 
     sendParamsWebSocket(params) {
-        console.log("params2", JSON.stringify(params))
         if (this.ws.readyState === 1) {
             this.ws.send(
                 JSON.stringify(params)

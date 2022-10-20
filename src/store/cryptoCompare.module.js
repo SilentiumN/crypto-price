@@ -10,7 +10,8 @@ export const cryptoCompareModule = {
             graph: [],
             countCards: 6,
             filterValue: "",
-            windowWidth: 0
+            windowWidth: 0,
+            connecting: "loading"
         };
     },
 
@@ -50,9 +51,11 @@ export const cryptoCompareModule = {
 
     mutations: {
         SET_NEW_CRYPTO_SUB_VALUE(state, newSubArray) {
-            console.log(newSubArray);
             for (const newSub of newSubArray) {
-                state.cryptoSubValue[newSub] = 0;
+                if (Object.keys(state.cryptoSubValue).indexOf(newSub) === -1) {
+                    state.cryptoSubValue[newSub] = 0;
+                }
+                
             }
         },
         DELETE_CRYPTO_SUB_VALUE(state, deleteName) {
@@ -75,7 +78,6 @@ export const cryptoCompareModule = {
         },
         UPDATE_WINDOW_WIDTH(state, windowWidth) {
             state.windowWidth = windowWidth
-            console.log(state.windowWidth)
         },
         SET_ACTIVE_SUB_NAME(state, activeGraphName) {
             state.activeSubNameGraph = activeGraphName;
@@ -88,6 +90,12 @@ export const cryptoCompareModule = {
         },
         CLEAR_GRAPH(state) {
             state.graph = []
+        },
+        CONNECTING_SUCCESS(state) {
+            state.connecting = "success"
+        },
+        CONNECTING_ERROR(state) {
+            state.connecting = "error"
         }
     },
 
@@ -104,9 +112,7 @@ export const cryptoCompareModule = {
             };
 
             webSocket.onmessage = function onStreamMessage() {
-                var message = JSON.parse(event.data);
-                console.log(message);
-
+                const message = JSON.parse(event.data);
                 if (message.TYPE === "5" && message.PRICE) {
                     commit("UPDATE_CRYPTO_SUB_VALUE", {
                         name: message.FROMSYMBOL,
@@ -131,6 +137,14 @@ export const cryptoCompareModule = {
                         message.MESSAGE === "UNSUBSCRIBECOMPLETE")
                 ) {
                     dispatch("setLocalStorage");
+                }
+                else if (message.TYPE === "20" && message.MESSAGE === "STREAMERWELCOME") {
+                    commit("CONNECTING_SUCCESS");
+                    console.log("Connecting WebSocket success");
+                }
+                else if (message.TYPE === "429" && message.MESSAGE === "TOO_MANY_SOCKETS_MAX_1_PER_CLIENT") {
+                    commit("CONNECTING_ERROR")
+                    console.log("Connecting WebSocket Error: " + message.MESSAGE);
                 }
             };
 
@@ -157,6 +171,7 @@ export const cryptoCompareModule = {
         },
         addNewSub({ commit }, newSubValueArray) {
             commit("SET_NEW_CRYPTO_SUB_VALUE", newSubValueArray);
+            
 
             const params = {
                 action: "SubAdd",
@@ -165,16 +180,20 @@ export const cryptoCompareModule = {
 
             for (const cryptoSubName of newSubValueArray) {
                 params.subs.push("5~CCCAGG~" + cryptoSubName + "~USD");
+                
             }
             cryptoCompareServices.sendParamsWebSocket(params);
         },
-        deleteSub({ commit, dispatch }, deleteSubValue) {
+        deleteSub({ commit, dispatch, state }, deleteSubValue) {
             cryptoCompareServices.sendParamsWebSocket({
                 action: "SubRemove",
                 subs: ["5~CCCAGG~" + deleteSubValue + "~USD"],
             });
             commit("DELETE_CRYPTO_SUB_VALUE", deleteSubValue);
-            dispatch("clearGraph")
+            if (deleteSubValue === state.activeSubNameGraph) {
+                dispatch("clearGraph")
+            }
+            
         },
         updatePage({ commit, dispatch, getters }, type) {
             
@@ -213,10 +232,9 @@ export const cryptoCompareModule = {
             commit("UPDATE_GRAPH", state.cryptoSubValue[activeGraphName]);
             commit("SET_ACTIVE_SUB_NAME", activeGraphName);
         },
-        clearGraph({commit, state}) {
+        clearGraph({commit}) {
             commit("CLEAR_ACTIVE_SUB_NAME");
             commit("CLEAR_GRAPH");
-            console.log(state)
         },
         updateWindowWidth({commit}, windowWidth) {
             commit("UPDATE_WINDOW_WIDTH", windowWidth)

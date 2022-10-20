@@ -32,12 +32,6 @@
 
 <script>
 export default {
-    components: {},
-    data() {
-        return {
-        };
-    },
-    methods: {},
     computed: {
         searchValue: {
             get() {
@@ -51,5 +45,3 @@ export default {
 };
 </script>
 
-<style>
-</style>

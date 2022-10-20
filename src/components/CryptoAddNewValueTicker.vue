@@ -8,13 +8,6 @@
 <script>
 
 export default {
-    components: {
-    },
-    data() {
-        return {
-        };
-    },
-    methods: {},
     props: {
         modelValue: {
             type: String,

@@ -1,7 +1,7 @@
 <template>
-    <div class="w-full sm:w-custom-2 lg:w-custom-3 2xl:w-custom-4">
+    <div class="w-full sm:w-custom-2 lg:w-custom-3 2xl:w-custom-4" v-if="cryptoPrice != 0">
         <div
-            class="flex flex-col items-start py-5 px-4 bg-white border border-solid border-gray-300 rounded-lg font-inter"
+            class="flex flex-col items-start py-5 px-4 bg-white border border-solid border-gray-300 rounded-lg font-inter transition-all"
             
             :class="{'ring ring-gray-900': cryptoName === activeSubNameGraph}"
             
@@ -43,9 +43,6 @@ export default {
         CryptoGraph: defineAsyncComponent(() =>
             import("@/components/CryptoGraph.vue")
         ),
-    },
-    data() {
-        return {};
     },
     methods: {
         deleteSub() {
